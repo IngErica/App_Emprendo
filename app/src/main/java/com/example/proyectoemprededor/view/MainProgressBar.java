@@ -24,8 +24,6 @@ public class MainProgressBar extends AppCompatActivity {
 
         verticalStepView = findViewById(R.id.verticalStepView);
 
-
-
         //verticalStepView.setStepsViewIndicatorComplectingPosition()
 
     }

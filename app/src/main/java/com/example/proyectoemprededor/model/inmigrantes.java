@@ -10,17 +10,27 @@ public class inmigrantes implements Serializable {
     String materialurl;
     String titulo;
     String video;
+    String imagenurl;
     List<contenido> contenido;
 
     public inmigrantes(){}
 
-    public inmigrantes(String actividaurl, String documentourl, String materialurl, String titulo, String video, List<contenido> contenido) {
+    public inmigrantes(String actividaurl, String documentourl, String materialurl, String titulo, String video, String imagenurl, List<contenido> contenido) {
         this.actividaurl = actividaurl;
         this.documentourl = documentourl;
         this.materialurl = materialurl;
         this.titulo = titulo;
         this.video = video;
+        this.imagenurl = imagenurl;
         this.contenido = contenido;
+    }
+
+    public String getImagenurl() {
+        return imagenurl;
+    }
+
+    public void setImagenurl(String imagenurl) {
+        this.imagenurl = imagenurl;
     }
 
     public String getActividaurl() {

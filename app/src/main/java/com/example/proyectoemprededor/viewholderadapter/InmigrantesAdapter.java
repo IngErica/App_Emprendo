@@ -15,6 +15,7 @@ import com.example.proyectoemprededor.model.inmigrantes;
 import com.example.proyectoemprededor.view.ShowDetail;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -26,7 +27,7 @@ public class InmigrantesAdapter extends FirebaseRecyclerAdapter<inmigrantes, Inm
     protected void onBindViewHolder(@NonNull inmigrantesViewHolder holder, int position, @NonNull inmigrantes inmigrantes)
     {
         holder.titulo.setText(inmigrantes.getTitulo());
-        //  Glide.with(holder.img.getContext()).load(model.getPurl()).into(holder.img);
+        Picasso.with(holder.img.getContext()).load(inmigrantes.getImagenurl()).into(holder.img);
         Log.d("inmigrantes"," data : "+ inmigrantes);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +54,7 @@ public class InmigrantesAdapter extends FirebaseRecyclerAdapter<inmigrantes, Inm
         public inmigrantesViewHolder(@NonNull View itemView)
         {
             super(itemView);
-            //img=itemView.findViewById(R.id.imagenlist);
+            img=itemView.findViewById(R.id.imagenlist);
             titulo=itemView.findViewById(R.id.titulo);
 
 

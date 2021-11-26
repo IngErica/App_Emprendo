@@ -40,6 +40,11 @@ public class ShowDetail extends AppCompatActivity {
         materialurl = findViewById(R.id.materialurl);
         actividadurl =  findViewById(R.id.actividaurl);
         documentourl =  findViewById(R.id.documentourl);
+
+        initData();
+        initVideo();
+        initRecyclerView();
+
         documentourl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,9 +53,7 @@ public class ShowDetail extends AppCompatActivity {
             }
         });
 
-        initData();
-        initVideo();
-        initRecyclerView();
+
 
         BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, actividadurl)
                 .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
