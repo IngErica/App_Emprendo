@@ -1,6 +1,7 @@
 package com.example.proyectoemprededor.view;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,12 +11,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.util.Linkify;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectoemprededor.R;
+import com.example.proyectoemprededor.model.Global;
 import com.example.proyectoemprededor.model.inmigrantes;
+import com.example.proyectoemprededor.model.persona;
 import com.example.proyectoemprededor.viewholderadapter.inmigrantesContenidoAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -29,49 +40,114 @@ public class ShowDetail extends AppCompatActivity {
     private RecyclerView recyclerViewContenido;
     private inmigrantesContenidoAdapter inmigrantesContenidoAdapter;
     private YouTubePlayerView youTubePlayerView;
+    private DatabaseReference databaseReference;
+    private FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_detail);
-        youTubePlayerView = findViewById(R.id.youtube_player_view);
-        recyclerViewContenido =  findViewById(R.id.recviewcontenido);
-        titulocontenido = findViewById(R.id.titleTextcontenido);
-        materialurl = findViewById(R.id.materialurl);
-        actividadurl =  findViewById(R.id.actividaurl);
-        documentourl =  findViewById(R.id.documentourl);
 
-        initData();
-        initVideo();
-        initRecyclerView();
+        inicializarFirebase();
+        Global global = (Global)getApplicationContext();
+        int position = getIntent().getExtras().getInt("position");
 
-        documentourl.setOnClickListener(new View.OnClickListener() {
+        databaseReference.child("Persona").child(global.getId()).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(inmigrantes.getDocumentourl()));
-                startActivity(intent);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.exists()){
+                    final String estado = dataSnapshot.child("estadoUnidad").getValue(String.class);
+                    if(estado!=null) {
+                        global.setEstadoUnidad(estado);
+                    }else{
+                    }
+                   }else{
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Fallo la lectura: " + databaseError.getCode());
+
             }
         });
 
 
+        if(position > Integer.parseInt(global.getEstadoUnidad())){
+            AlertDialog.Builder mBuelder = new AlertDialog.Builder(this, R.style.fullscreenalert);
+            View view =  getLayoutInflater().inflate(R.layout.full_alertdialogo, null);
+            TextView salir =  view.findViewById(R.id.Mensaje);
+            Button volver = view.findViewById(R.id.Volver);
+            String unidad = "";
+            if(Integer.parseInt(global.getEstadoUnidad())==0)
+                unidad = "0";
+            else
+                unidad = String.valueOf((Integer.parseInt(global.getEstadoUnidad()))+1);
+            salir.setText("Debes ver la Unidad " + unidad);
+            mBuelder.setView(view);
+            mBuelder.setCancelable(false);
+            AlertDialog dialog = mBuelder.create();
+            dialog.show();
 
-        BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, actividadurl)
-                .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
-                    @Override
-                    public boolean onClick(TextView textView, String url) {
-                        Toast.makeText(ShowDetail.this, "Website:"+ url, Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                });
+            volver.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ShowInmigrantes.class);
+                    startActivity(intent);
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+        }else {
+            persona personaUnidad = new persona();
+            personaUnidad.setId(global.getId());
+            if(Integer.parseInt(global.getEstadoUnidad()) == 0)
+                databaseReference.child("Persona").child(personaUnidad.getId()).child("estadoUnidad").setValue("1");
+            if(position >= Integer.parseInt(global.getEstadoUnidad())) {
+                personaUnidad.setEstadoUnidad(String.valueOf(position+1));
+                databaseReference.child("Persona").child(personaUnidad.getId()).child("estadoUnidad").setValue(personaUnidad.getEstadoUnidad());
+            }
 
-        BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, materialurl)
-                .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
-                    @Override
-                    public boolean onClick(TextView textView, String url) {
-                        Toast.makeText(ShowDetail.this, "Website:"+ url, Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                });
+            setContentView(R.layout.activity_show_detail);
+            youTubePlayerView = findViewById(R.id.youtube_player_view);
+            recyclerViewContenido = findViewById(R.id.recviewcontenido);
+            titulocontenido = findViewById(R.id.titleTextcontenido);
+            materialurl = findViewById(R.id.materialurl);
+            actividadurl = findViewById(R.id.actividaurl);
+            documentourl = findViewById(R.id.documentourl);
+
+            initData();
+            initVideo();
+            initRecyclerView();
+
+            documentourl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(inmigrantes.getDocumentourl()));
+                    startActivity(intent);
+                }
+            });
+
+
+            BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, actividadurl)
+                    .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
+                        @Override
+                        public boolean onClick(TextView textView, String url) {
+                            Toast.makeText(ShowDetail.this, "Website:" + url, Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+
+            BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, materialurl)
+                    .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
+                        @Override
+                        public boolean onClick(TextView textView, String url) {
+                            Toast.makeText(ShowDetail.this, "Website:" + url, Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+        }
 
     }
     private void initData() {
@@ -98,7 +174,14 @@ public class ShowDetail extends AppCompatActivity {
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
                 String videoId = inmigrantes.getVideo();
                 youTubePlayer.loadVideo(videoId, 0);
+                youTubePlayer.pause();
             }
         });
+    }
+    private void inicializarFirebase() {
+
+        auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
     }
 }

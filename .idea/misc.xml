@@ -5,11 +5,12 @@
       <map>
         <entry key="..\:/Users/ABIRCA/AndroidStudioProjects/ProyectoEmprededor/app/src/main/res/drawable/close_circle_outline.xml" value="0.22552083333333334" />
         <entry key="..\:/Users/ABIRCA/AndroidStudioProjects/ProyectoEmprededor/app/src/main/res/layout/activity_home.xml" value="0.209375" />
-        <entry key="..\:/Users/ABIRCA/AndroidStudioProjects/ProyectoEmprededor/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/ABIRCA/AndroidStudioProjects/ProyectoEmprededor/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/ABIRCA/AndroidStudioProjects/ProyectoEmprededor/app/src/main/res/layout/activity_show_detail.xml" value="0.209375" />
         <entry key="..\:/Users/ABIRCA/AndroidStudioProjects/ProyectoEmprededor/app/src/main/res/layout/activity_show_inmigrantes.xml" value="0.1953125" />
         <entry key="..\:/Users/ABIRCA/AndroidStudioProjects/ProyectoEmprededor/app/src/main/res/layout/activity_state_progress_bar.xml" value="0.209375" />
         <entry key="..\:/Users/ABIRCA/AndroidStudioProjects/ProyectoEmprededor/app/src/main/res/layout/cardviewinmigrantes.xml" value="0.209375" />
+        <entry key="..\:/Users/ABIRCA/AndroidStudioProjects/ProyectoEmprededor/app/src/main/res/layout/full_alertdialogo.xml" value="0.1" />
         <entry key="..\:/Users/ABIRCA/AndroidStudioProjects/ProyectoEmprededor/app/src/main/res/layout/viewholder_contenido.xml" value="0.209375" />
       </map>
     </option>

@@ -100,9 +100,20 @@
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"/>
-            </LinearLayout>
+
+                </LinearLayout>
 
         </androidx.cardview.widget.CardView>
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.Large.Circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:SpinKit_Color="@color/purple_700" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
@@ -139,6 +150,7 @@
                     android:textSize="14sp"
                     android:layout_marginTop="8dp"
                     android:textStyle="bold"/>
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -154,5 +166,6 @@
         android:src="@drawable/close_circle_outline"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

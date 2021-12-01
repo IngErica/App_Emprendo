@@ -9,9 +9,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.proyectoemprededor.R;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.Circle;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,13 +26,15 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     private final static int RC_SIGN_IN = 123;
-
+    ProgressBar progressBar;
 
     @Override
     protected void onStart() {
@@ -49,11 +54,16 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         createRequest();
-
+        progressBar = findViewById(R.id.spin_kit);
+        Circle Circle = new Circle();
+        progressBar.setIndeterminateDrawable(Circle);
+        progressBar.setVisibility(View.INVISIBLE);
         findViewById(R.id.google_signIn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 signIn();
+
             }
         });
     }
@@ -89,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
+                Toast.makeText(MainActivity.this, "Google sign in failed " + e, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -104,13 +115,15 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
                             startActivity(intent);
-
+                            progressBar.setVisibility(View.INVISIBLE);
 
                         } else {
+                            progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(MainActivity.this, "Sorry auth failed.", Toast.LENGTH_SHORT).show();
                         }
                         // ...
                     }
                 });
     }
+
 }

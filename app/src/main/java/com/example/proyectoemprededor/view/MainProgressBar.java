@@ -2,12 +2,14 @@ package com.example.proyectoemprededor.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
 import com.baoyachi.stepview.VerticalStepView;
 import com.example.proyectoemprededor.R;
+import com.example.proyectoemprededor.model.Global;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,20 +25,24 @@ public class MainProgressBar extends AppCompatActivity {
         setContentView(R.layout.activity_state_progress_bar);
 
         verticalStepView = findViewById(R.id.verticalStepView);
-
-        //verticalStepView.setStepsViewIndicatorComplectingPosition()
-
+        setStepView();
     }
     private void setStepView(){
-       /* if(Build.VERSION.SDK_INT => Build.VERSION_CODES.M)
+        Global global = (Global)getApplicationContext();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             verticalStepView.setStepsViewIndicatorComplectingPosition(source().size())
                     .reverseDraw(false)
+                    .setTextSize(15)
                     .setStepViewTexts(source())
                     .setLinePaddingProportion(0.85f)
-                    .setStepsViewIndicatorCompletedLineColor(getColor(R.color.design_default_color_on_primary))
-                    .setStepViewComplectedTextColor(getColor(R.color.design_default_color_on_primary))
-                    .*/
-
+                    .setStepsViewIndicatorCompletedLineColor(getColor(R.color.white))
+                    .setStepViewComplectedTextColor(getColor(R.color.white))
+                    .setStepViewUnComplectedTextColor(getColor(R.color.black))
+                    .setStepsViewIndicatorAttentionIcon(getDrawable(R.drawable.complted))
+                    .setStepsViewIndicatorAttentionIcon(getDrawable(R.drawable.attention))
+                    .setStepsViewIndicatorDefaultIcon(getDrawable(R.drawable.default_icon));
+            verticalStepView.setStepsViewIndicatorComplectingPosition(Integer.parseInt(global.getEstadoUnidad()));
+        }
     }
 
     private  List<String> source() {

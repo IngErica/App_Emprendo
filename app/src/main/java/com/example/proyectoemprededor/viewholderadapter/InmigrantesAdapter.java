@@ -6,12 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectoemprededor.R;
+import com.example.proyectoemprededor.model.Global;
 import com.example.proyectoemprededor.model.inmigrantes;
+import com.example.proyectoemprededor.model.persona;
+import com.example.proyectoemprededor.view.HomeActivity;
 import com.example.proyectoemprededor.view.ShowDetail;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -29,11 +33,13 @@ public class InmigrantesAdapter extends FirebaseRecyclerAdapter<inmigrantes, Inm
         holder.titulo.setText(inmigrantes.getTitulo());
         Picasso.with(holder.img.getContext()).load(inmigrantes.getImagenurl()).into(holder.img);
         Log.d("inmigrantes"," data : "+ inmigrantes);
+        int positio = position;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(holder.itemView.getContext(), ShowDetail.class);
                 intent.putExtra("inmigrantes", inmigrantes);
+                intent.putExtra("position", positio);
                 holder.itemView.getContext().startActivity(intent);
             }
         });
