@@ -60,12 +60,15 @@ public class HomeActivity extends AppCompatActivity {
         btnStudentsprogreso = findViewById(R.id.btnStudentsprogreso);
 
         progressBar = findViewById(R.id.spin_kit);
+        // se instancia el metodo circle para el progrebar
         Circle Circle = new Circle();
         progressBar.setIndeterminateDrawable(Circle);
         progressBar.setVisibility(View.GONE);
 
+        //inicar firebase
         inicializarFirebase();
 
+        //validar el usuario logeoda
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if(signInAccount != null){
             global = (Global)getApplicationContext();
@@ -73,11 +76,13 @@ public class HomeActivity extends AppCompatActivity {
             global.setCorreo(signInAccount.getEmail());
             global.setFoto(signInAccount.getPhotoUrl().toString());
             global.setId(signInAccount.getId());
+            // consulta si la persona existe
             databaseReference.child("Persona").child(signInAccount.getId()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     if(dataSnapshot.exists()){
+                        // valida la unidad de progreso
                         final String estado = dataSnapshot.child("estadoUnidad").getValue(String.class);
                         if(estado!=null) {
                             global.setEstadoUnidad(estado);
@@ -85,6 +90,7 @@ public class HomeActivity extends AppCompatActivity {
                             global.setEstadoUnidad("0");
                         }
                     }else{
+                        //crear el usuario y iniciar la unidad de progreso en cero
                         global.setEstadoUnidad("0");
                         persona = new persona(global.getNombre(), global.getCorreo(), global.getFoto(), global.getId(), global.getEstadoUnidad());
                         databaseReference.child("Persona").child(persona.getId()).setValue(persona);
@@ -107,14 +113,17 @@ public class HomeActivity extends AppCompatActivity {
 
         consultarFirebase();
 
+        // boton de ver las unidades
         btnStudents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Ir a la otra actividad
                 Intent intent = new Intent(getApplicationContext(), ShowInmigrantes.class);
                 startActivity(intent);
             }
         });
 
+        //boton de ver el pregreso
         btnStudentsprogreso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,10 +132,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        // Boton  de salir
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //salir de aplicacion y cerrar sesiòn
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
@@ -136,21 +147,26 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    //actualizar automaticamente cuando hay un evento en la HomeActivity
     @Override
     protected void onStart() {
         super.onStart();
         consultarFirebase();
     }
 
+    //no enviar de nuevo la consulta
     @Override
     protected void onStop() {
         super.onStop();
     }
 
+    //deshabilitar el boton que hace click atras
     @Override
     public void onBackPressed() {
-       // super.onBackPressed();
+
     }
+
+    //metodo inicializa la base de datos firebase
     private void inicializarFirebase() {
 
         auth = FirebaseAuth.getInstance();
@@ -158,6 +174,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    //consulta la base de datos persona para obtener el progreso de la persona
     private void consultarFirebase(){
         progressBar.setVisibility(View.VISIBLE);
         databaseReference.child("Persona").child(signInAccount.getId()).addValueEventListener(new ValueEventListener() {

@@ -49,9 +49,12 @@ public class ShowDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         inicializarFirebase();
+        //consulta la clase global
         Global global = (Global)getApplicationContext();
+        //capturo el putextra de postion
         int position = getIntent().getExtras().getInt("position");
 
+        //consulta la base de datos para obtener la unidad de progreso
         databaseReference.child("Persona").child(global.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -73,8 +76,10 @@ public class ShowDetail extends AppCompatActivity {
             }
         });
 
-
+        //validar si el usuario puede ver la unidad
+        //la unida debe ser mayor que la posisiòn
         if(position > Integer.parseInt(global.getEstadoUnidad())){
+            // se crea un dialogo de alert
             AlertDialog.Builder mBuelder = new AlertDialog.Builder(this, R.style.fullscreenalert);
             View view =  getLayoutInflater().inflate(R.layout.full_alertdialogo, null);
             TextView salir =  view.findViewById(R.id.Mensaje);
@@ -88,6 +93,7 @@ public class ShowDetail extends AppCompatActivity {
             mBuelder.setView(view);
             mBuelder.setCancelable(false);
             AlertDialog dialog = mBuelder.create();
+            // activar el dialogo
             dialog.show();
 
             volver.setOnClickListener(new View.OnClickListener() {
@@ -95,13 +101,16 @@ public class ShowDetail extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), ShowInmigrantes.class);
                     startActivity(intent);
+                    //oculatar la alerta de dialogo
                     dialog.dismiss();
                     finish();
                 }
             });
         }else {
+            //instancia la clase persona
             persona personaUnidad = new persona();
             personaUnidad.setId(global.getId());
+            //actualizar el pregreso de persona
             if(Integer.parseInt(global.getEstadoUnidad()) == 0)
                 databaseReference.child("Persona").child(personaUnidad.getId()).child("estadoUnidad").setValue("1");
             if(position >= Integer.parseInt(global.getEstadoUnidad())) {
@@ -121,6 +130,7 @@ public class ShowDetail extends AppCompatActivity {
             initVideo();
             initRecyclerView();
 
+            // clic de descarga del documento
             documentourl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -129,7 +139,7 @@ public class ShowDetail extends AppCompatActivity {
                 }
             });
 
-
+            //el boton de ver el link en el navegador actividad
             BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, actividadurl)
                     .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
                         @Override
@@ -139,6 +149,7 @@ public class ShowDetail extends AppCompatActivity {
                         }
                     });
 
+            //el boton de ver el link en el navegador material
             BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, materialurl)
                     .setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
                         @Override
@@ -150,6 +161,7 @@ public class ShowDetail extends AppCompatActivity {
         }
 
     }
+    //opterner la informacion de inputText
     private void initData() {
         Intent inputText = getIntent();
         inmigrantes = (inmigrantes) inputText.getSerializableExtra("inmigrantes");
@@ -160,12 +172,14 @@ public class ShowDetail extends AppCompatActivity {
         documentourl.setText(inmigrantes.getDocumentourl());
     }
 
+    // cargar el recucler
     private void initRecyclerView() {
         inmigrantesContenidoAdapter = new inmigrantesContenidoAdapter(inmigrantes.getContenido());
         recyclerViewContenido.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewContenido.setAdapter(inmigrantesContenidoAdapter);
     }
 
+    //cargar el video de youtube
     private void initVideo() {
         getLifecycle().addObserver(youTubePlayerView);
 
@@ -178,6 +192,8 @@ public class ShowDetail extends AppCompatActivity {
             }
         });
     }
+
+    //iniciar la base de datos
     private void inicializarFirebase() {
 
         auth = FirebaseAuth.getInstance();

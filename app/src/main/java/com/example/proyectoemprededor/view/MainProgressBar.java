@@ -41,10 +41,12 @@ public class MainProgressBar extends AppCompatActivity {
                     .setStepsViewIndicatorAttentionIcon(getDrawable(R.drawable.complted))
                     .setStepsViewIndicatorAttentionIcon(getDrawable(R.drawable.attention))
                     .setStepsViewIndicatorDefaultIcon(getDrawable(R.drawable.default_icon));
+            //se progreso y que estado esta
             verticalStepView.setStepsViewIndicatorComplectingPosition(Integer.parseInt(global.getEstadoUnidad()));
         }
     }
 
+    //se carga las unidades existentes
     private  List<String> source() {
 
         List<String> source = new ArrayList<>();

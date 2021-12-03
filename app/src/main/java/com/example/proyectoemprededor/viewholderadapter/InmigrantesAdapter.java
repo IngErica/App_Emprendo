@@ -30,6 +30,7 @@ public class InmigrantesAdapter extends FirebaseRecyclerAdapter<inmigrantes, Inm
     @Override
     protected void onBindViewHolder(@NonNull inmigrantesViewHolder holder, int position, @NonNull inmigrantes inmigrantes)
     {
+        //para lo datos de lista de acurdo a la posisiòn
         holder.titulo.setText(inmigrantes.getTitulo());
         Picasso.with(holder.img.getContext()).load(inmigrantes.getImagenurl()).into(holder.img);
         Log.d("inmigrantes"," data : "+ inmigrantes);
@@ -38,6 +39,7 @@ public class InmigrantesAdapter extends FirebaseRecyclerAdapter<inmigrantes, Inm
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(holder.itemView.getContext(), ShowDetail.class);
+                //inviar informaciòn inmigrantes y posisiòn
                 intent.putExtra("inmigrantes", inmigrantes);
                 intent.putExtra("position", positio);
                 holder.itemView.getContext().startActivity(intent);
@@ -49,10 +51,12 @@ public class InmigrantesAdapter extends FirebaseRecyclerAdapter<inmigrantes, Inm
     @Override
     public inmigrantesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
+        //cargar el layout
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.cardviewinmigrantes,parent,false);
         return new inmigrantesViewHolder(view);
     }
 
+    // crea un clase de viewholder para capturar los campos
     class inmigrantesViewHolder extends RecyclerView.ViewHolder
     {
         CircleImageView img;
@@ -62,8 +66,6 @@ public class InmigrantesAdapter extends FirebaseRecyclerAdapter<inmigrantes, Inm
             super(itemView);
             img=itemView.findViewById(R.id.imagenlist);
             titulo=itemView.findViewById(R.id.titulo);
-
-
         }
     }
 }

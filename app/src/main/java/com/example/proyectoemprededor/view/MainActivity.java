@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    //crear el request autenticaciòn de firebase
     private void createRequest(){
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions

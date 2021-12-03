@@ -27,7 +27,7 @@
 
     <TextView
         android:textSize="18dp"
-        android:text="Abimelec Reyes Castañeda"
+        android:text="Nombre Usuario"
         android:id="@+id/user_name"
         android:textColor="#ffffff"
         android:layout_marginTop="32dp"

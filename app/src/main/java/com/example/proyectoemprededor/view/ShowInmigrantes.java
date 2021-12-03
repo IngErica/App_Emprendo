@@ -38,8 +38,10 @@ public class ShowInmigrantes extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         recyclerView = findViewById(R.id.recview);
+
         recyclerView.setLayoutManager(new CustomLinearLayoutManager(this));
 
+        // consultar la base de datos de firebase inmigrantes
         FirebaseRecyclerOptions<inmigrantes> options =
                 new FirebaseRecyclerOptions.Builder<inmigrantes>()
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("inmigrantes"), inmigrantes.class)
@@ -47,10 +49,14 @@ public class ShowInmigrantes extends AppCompatActivity {
 
         Log.d("Options"," data : "+options);
 
+        //lo envia a la adapter viewholder
         inmigrantesAdapter = new InmigrantesAdapter(options);
+        //carga la informaciòn en lista
         recyclerView.setAdapter(inmigrantesAdapter);
         progressBar.setVisibility(View.GONE);
     }
+
+    //captura el boton de atras
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -58,6 +64,8 @@ public class ShowInmigrantes extends AppCompatActivity {
         finish();
     }
 
+
+    //actualizar cualquer cambio en la base de datos
     @Override
     protected void onStart() {
         super.onStart();
